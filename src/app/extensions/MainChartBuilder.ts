@@ -1,42 +1,40 @@
 import { ElementRef } from "@angular/core";
 import { ETHUSDService } from "../services/data/ETHUSD.service";
+import { VirtualCameraService } from "../services/shared/virtual-camera.service";
+import { Bounds } from "../properties/Bounds";
+import { OHLCV } from "../properties/OHLCV";
+import { LineChart } from "../designs/LineChart";
 
 export abstract class MainChartBuilder {
 
+    private chartBounds: Bounds = new Bounds();
+    private priceBounds: Bounds = new Bounds();
+    private rangeBounds: Bounds = new Bounds();
+    private lineChart!: LineChart;
     protected canvas2D!: CanvasRenderingContext2D;
     protected canvasRef!: ElementRef<HTMLCanvasElement>;
+    protected camera!: VirtualCameraService;
+    protected mETHUSDService!: ETHUSDService
 
-    protected rescaleCanvas() {
-        const canvas = this.canvas.nativeElement;
-        // const dpr = window.devicePixelRatio || 1;
+    protected scaleCanvas(): void {
+        const canvas = this.canvasRef.nativeElement;
+        this.camera.windowWidth = canvas.clientWidth;
+        this.camera.windowHeight = canvas.clientHeight;
 
-        // canvas.width = canvas.clientWidth * dpr;
-        // canvas.height = canvas.clientHeight * dpr;
+        this.chartBounds.left.apply(200);
+        this.chartBounds.right.apply(this.camera.windowWidth - 200);
+        this.chartBounds.top.apply(0);
+        this.chartBounds.bottom.apply(this.camera.windowHeight - 200);
 
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-
-        // Scale the drawing context
-        // this.drawShape.scale(dpr, dpr);
-
-        const windowWidth = canvas.clientWidth;
-        const windowHeight = canvas.clientHeight;
-
-        this.camera.resetBounds();
-        if(windowWidth > windowHeight) {
-            const ratio = windowWidth / windowHeight;
-            const newWidth = ((this.camera.defaultWidth * ratio));
-            this.camera.setWidth(newWidth);
-        }
-        else if (windowWidth < windowHeight) {
-            const ratio = windowHeight / windowWidth;
-            const newHeight = ((this.camera.defaultHeight * ratio));
-            this.camera.setHeight(newHeight);
-        }
+        this.initialize();
+        this.lineChart.onCompute();
+        this.lineChart.onDraw();
     }
 
-    private draw() {
-
+    protected initialize() {
+        if (!this.lineChart) {
+            this.lineChart = new LineChart(this.mETHUSDService, this.camera, this.canvas2D, this.chartBounds);
+        }
     }
 
     // 1st: Position the camera 

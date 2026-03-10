@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { Bounds } from 'src/app/properties/Bounds';
 
 @Injectable({
@@ -6,16 +6,15 @@ import { Bounds } from 'src/app/properties/Bounds';
 })
 export class VirtualCameraService {
   
-  bounds: Bounds = new Bounds();
+  camBounds: Bounds = new Bounds(200, 200, 100, 100);
+  screenBounds: Bounds = new Bounds(0, 0, 0, 0);
+  centerX = computed(() => this.camBounds.right() - this.camBounds.left() / 2);
   horizontalZoom = 1;
   verticalZoom = 1;
   horizontalSpace = 10;
-
-  resetBounds() {
-    this.bounds.left.apply(0);
-    this.bounds.right.apply(0); 
-    this.bounds.top.apply(0);
-    this.bounds.bottom.apply(0);
-  }
-
+  highPrice = 0;
+  lowPrice = 0;
+  isPriceLocked = false;
+  windowWidth = 0;
+  windowHeight = 0;
 }

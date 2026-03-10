@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MainChartBuilder } from './extensions/MainChartBuilder';
 import { VirtualCameraService } from './services/shared/virtual-camera.service';
 import { ETHUSDService } from './services/data/ETHUSD.service';
@@ -17,15 +17,19 @@ export class AppComponent extends MainChartBuilder {
     private ETHUSDService: ETHUSDService
   ) {
     super();
-    this.ETHUSDService.loadData().then(() => {
-      console.log(this.ETHUSDService.getRangeData());
-    });
+    this.camera = virtualCameraService;
+    this.mETHUSDService = ETHUSDService;
   }
-
 
   ngAfterViewInit() {
     this.canvasRef = this.canvasHTMLRef;
     this.canvas2D = this.canvasHTMLRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    this.scaleCanvas();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.scaleCanvas();
   }
 
   override setCameraXPosition(): void {
