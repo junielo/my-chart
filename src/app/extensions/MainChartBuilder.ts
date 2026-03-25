@@ -17,23 +17,35 @@ export abstract class MainChartBuilder {
     protected mETHUSDService!: ETHUSDService
 
     protected scaleCanvas(): void {
+        console.log('Resizing canvas...');
         const canvas = this.canvasRef.nativeElement;
-        this.camera.windowWidth = canvas.clientWidth;
-        this.camera.windowHeight = canvas.clientHeight;
+        this.camera.canvasWidth = canvas.width;
+        this.camera.canvasHeight = canvas.height;
 
-        this.chartBounds.left.apply(200);
-        this.chartBounds.right.apply(this.camera.windowWidth - 200);
-        this.chartBounds.top.apply(0);
-        this.chartBounds.bottom.apply(this.camera.windowHeight - 200);
-
-        this.initialize();
-        this.lineChart.onCompute();
-        this.lineChart.onDraw();
+        this.canvas2D.clearRect(0, 0, canvas.width, canvas.height);
+        this.computeChartPart();
+        this.drawChartPart();
     }
 
     protected initialize() {
-        if (!this.lineChart) {
-            this.lineChart = new LineChart(this.mETHUSDService, this.camera, this.canvas2D, this.chartBounds);
+        this.scaleCanvas();
+        this.lineChart = new LineChart(
+            this.mETHUSDService,
+            this.camera, 
+            this.canvas2D, 
+            this.chartBounds
+        );
+        this.computeChartPart();
+        this.drawChartPart();
+    }
+
+    private computeChartPart() {
+
+    }
+
+    private drawChartPart() {
+        if (!!this.lineChart) {
+            this.lineChart.onDraw();
         }
     }
 

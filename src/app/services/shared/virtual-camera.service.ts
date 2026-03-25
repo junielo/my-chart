@@ -8,13 +8,13 @@ export class VirtualCameraService {
   
   camBounds: Bounds = new Bounds(200, 200, 100, 100);
   screenBounds: Bounds = new Bounds(0, 0, 0, 0);
-  centerX = computed(() => this.camBounds.right() - this.camBounds.left() / 2);
+  centerX = this.camBounds.right - this.camBounds.left / 2;
   horizontalZoom = 1;
   verticalZoom = 1;
   horizontalSpace = 10;
   highPrice = 0;
   lowPrice = 0;
   isPriceLocked = false;
-  windowWidth = 0;
-  windowHeight = 0;
+  canvasWidth = 0;
+  canvasHeight = 0;
 }

@@ -24,7 +24,7 @@ export class AppComponent extends MainChartBuilder {
   ngAfterViewInit() {
     this.canvasRef = this.canvasHTMLRef;
     this.canvas2D = this.canvasHTMLRef.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    this.scaleCanvas();
+    this.initialize();
   }
 
   @HostListener('window:resize')

@@ -5,35 +5,25 @@ import { VirtualCameraService } from "../services/shared/virtual-camera.service"
 import { Bounds } from "../properties/Bounds";
 
 export class LineChart {
-
-    ETHUSDService: ETHUSDService
-    camera: VirtualCameraService;
+    
     
     constructor(
-        ETHUSDService: ETHUSDService,
-        camera: VirtualCameraService,
+        private ETHUSDService: ETHUSDService,
+        private camera: VirtualCameraService,
         private canvas: CanvasRenderingContext2D,
         private chartBounds: Bounds
         
-    ) {
-        this.ETHUSDService = ETHUSDService;
-        this.camera = camera;
-        effect(() => {
-            console.log("Camera moved: ", this.camera.centerX())
-            this.onCompute();
-            this.onDraw();
-        });
-    }
+    ) {}
 
     onCompute() {
         
     }
 
     onDraw() {
-        this.canvas.clearRect(this.chartBounds.left(), this.chartBounds.top(), this.chartBounds.right() - this.chartBounds.left(), this.chartBounds.bottom() - this.chartBounds.top());
+        console.log('Drawing line chart...' + this.camera.canvasWidth);
         // Draw the background
         this.canvas.fillStyle = 'lightblue'; // Set background color
-        this.canvas.fillRect(this.chartBounds.left(), this.chartBounds.top(), this.chartBounds.right() - this.chartBounds.left(), this.chartBounds.bottom() - this.chartBounds.top());
+        this.canvas.fillRect(50, 0, this.camera.canvasWidth - 100, this.camera.canvasHeight); // Fill the background
     }
 
 }
